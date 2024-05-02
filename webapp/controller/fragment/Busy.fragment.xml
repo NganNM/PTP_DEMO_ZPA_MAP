@@ -1,0 +1,7 @@
+<c:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core">
+    <BusyDialog id="idZpamapBusyDialog"
+        title="Processing"
+        text="Đang xử lý " />
+</c:FragmentDefinition>

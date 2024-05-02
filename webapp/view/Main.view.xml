@@ -1,0 +1,193 @@
+<mvc:View controllerName="zpamap.controller.Main"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns:m="sap.m"
+    xmlns="sap.ui.table"
+	xmlns:smartTable="sap.ui.comp.smarttable">
+    <m:Page id="page">
+		<m:headerContent>
+			<m:Button text="Edit" press="onChangeEditMode" visible="{= !${mode>/editMode}}"></m:Button>
+			<m:Button text="Save" press="onSaveChanges" visible="{= ${mode>/editMode}}"></m:Button>
+			<m:Button text="Cancel" press="onCancelEdit" visible="{= ${mode>/editMode}}"></m:Button>
+		</m:headerContent>
+        <m:content>
+           <TreeTable
+		   		visibleRowCount="15"
+                id="main"
+                rows="{
+                    path : 'dataJSON>/items',
+                    parameters: {
+                        arrayNames:['items']
+                    }
+                }"
+                selectionMode="MultiToggle"
+                enableSelectAll="false"
+                ariaLabelledBy="title">
+                <extension>
+                    <m:OverflowToolbar style="Clear">
+                        <m:ToolbarSpacer/>
+                        <m:Button  id="btnAddGroup" text="Add Group" icon="sap-icon://sys-add" press="onAddGroup"/>
+                        <m:Button id="paste" text="Paste" icon="sap-icon://paste" press="onPaste" visible="{= ${mode>/editMode}}"/>
+                    </m:OverflowToolbar>
+                </extension>
+                <!-- <dragDropConfig>
+                    <dnd:DragDropInfo
+                            sourceAggregation="rows"
+                            targetAggregation="rows"
+                            dragStart="onDragStart"
+                            drop="onDrop"/>
+                </dragDropConfig> -->
+
+				<!-- Mã số -->
+                <Column  width="10rem" autoResizable="true">
+                    <m:Label text="Mã số"/>
+                    <template>
+                        <m:HBox>
+                            <m:Text text="{dataJSON>nodeid}" visible="{= !${dataJSON>newItemMode}}"/>
+                            <m:Input required="true" value="{dataJSON>nodeid}" visible="{dataJSON>newItemMode}"/>
+                        </m:HBox>
+                    </template>
+                </Column>
+
+                <columns>
+					<!-- Đơn vị -->
+                    <Column  width="10rem" autoResizable="true">
+                        <m:Label text="Đơn vị"/>
+                        <template>
+                            <m:HBox>
+                                <m:Text text="{dataJSON>donvi}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input required="true" value="{dataJSON>donvi}" visible="{= ${mode>/editMode}}"  change="onChangeEntry"/>
+                            </m:HBox>
+                        </template>
+                    </Column>
+
+					<!-- Mã đata -->
+                    <Column  width="10rem" autoResizable="true">
+                        <m:Label text="Mã đata"/>
+                        <template>
+                            <m:HBox>
+                                <m:Text text="{dataJSON>madata}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input required="true" value="{dataJSON>madata}" visible="{= ${mode>/editMode}}"  change="onChangeEntry"/>
+                            </m:HBox>
+                        </template>
+                    </Column>
+
+					<!-- Mã số -->
+                    <Column  width="10rem" autoResizable="true">
+                        <m:Label text="Mã số"/>
+                        <template>
+                            <m:HBox>
+                                <m:Text text="{dataJSON>nodeid}" visible="{= !${dataJSON>newItemMode}}"/>
+                                <m:Input required="true" value="{dataJSON>nodeid}" visible="{dataJSON>newItemMode}"/>
+                            </m:HBox>
+                        </template>
+                    </Column>
+
+					<!-- Group -->
+                    <!-- <Column width="5rem" autoResizable="true">
+                        <m:Label text="Group"/>
+                        <template>
+                            <m:HBox>
+                                <m:Text text="{dataJSON>groupid}" visible="{= !${dataJSON>newGroupMode}}"/>
+                                <m:Input  value="{dataJSON>groupid}" visible="{dataJSON>newGroupMode}" change="onChangeName"/>
+                            </m:HBox>
+                        </template>
+                    </Column> -->
+
+					<!-- Chỉ tiêu -->
+                    <Column width="25%" autoResizable="true">
+                        <m:Label text="Chỉ tiêu"/>
+                        <template>
+                            <m:VBox >
+                                <m:Text text="{dataJSON>nodedes}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input value="{dataJSON>nodedes}" maxLength="80" fieldWidth="100%"  visible="{= ${mode>/editMode}}" change="onChangeEntry"/>
+                            </m:VBox>
+                        </template>
+                    </Column>
+
+					<!-- Negative -->											
+                    <Column  width="5rem" autoResizable="true">
+                        <m:Label text="Negative"/>
+                        <template >
+                            <m:HBox justifyContent="Center" >
+                                <m:CheckBox selected="{dataJSON>negative}" enabled="{= ${mode>/editMode}}" select="onChangeEntry" />
+                            </m:HBox>
+                        </template>
+                    </Column>
+
+					<!-- GL Account -->
+                    <Column autoResizable="true">
+                        <m:Label text="G/L Account"/>
+                        <template>
+                            <m:VBox >
+                                <m:Text text="{dataJSON>glaccount}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input id='glaccount' value="{dataJSON>glaccount}" maxLength="80" fieldWidth="100%"  visible="{= ${mode>/editMode}}" change="onChangeEntry" showValueHelp="true" valueHelpRequest="onGLAccountValueHeplRequest"/>
+                            </m:VBox>
+                        </template>
+                    </Column>
+
+					<!-- Công thức -->																	
+                    <Column autoResizable="true">
+                        <m:Label text="Công thức"/>
+                        <template>
+                            <m:VBox >
+                                <m:Text text="{dataJSON>formular}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input id='formular' value="{dataJSON>formular}" maxLength="80" fieldWidth="100%"  visible="{= ${mode>/editMode}}" change="onChangeEntry"/>
+                            </m:VBox>
+                        </template>
+                    </Column>								
+
+					<!-- Profit center -->			
+                    <Column autoResizable="true">
+                        <m:Label text="Profit Center"/>
+                        <template>
+                            <m:VBox >
+                                <m:Text text="{dataJSON>profitcenter}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input id='profitcenter' value="{dataJSON>profitcenter}" maxLength="80" fieldWidth="100%"  visible="{= ${mode>/editMode}}" change="onChangeEntry" showValueHelp="true" valueHelpRequest="onGLAccountValueHeplRequest"/>
+                            </m:VBox>
+                        </template>
+                    </Column>	
+
+					<!-- Customer -->
+                    <Column autoResizable="true">
+                        <m:Label text="Customer"/>
+                        <template>
+                            <m:VBox >
+                                <m:Text text="{dataJSON>customer}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input id='customer' value="{dataJSON>customer}" maxLength="80" fieldWidth="100%"  visible="{= ${mode>/editMode}}" change="onChangeEntry"/>
+                            </m:VBox>
+                        </template>
+                    </Column>
+
+					<!-- Product -->
+                    <Column autoResizable="true">
+                        <m:Label text="Product"/>
+                        <template>
+                            <m:VBox >
+                                <m:Text text="{dataJSON>product}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input id='product' value="{dataJSON>product}" maxLength="80" fieldWidth="100%"  visible="{= ${mode>/editMode}}" change="onChangeEntry"/>
+                            </m:VBox>
+                        </template>
+                    </Column>					
+
+					<!-- Cost center -->
+                    <Column autoResizable="true">
+                        <m:Label text="Cost center"/>
+                        <template>
+                            <m:VBox >
+                                <m:Text text="{dataJSON>costcenter}" visible="{= !${mode>/editMode}}"/>
+                                <m:Input id='costcenter' value="{dataJSON>costcenter}" maxLength="80" fieldWidth="100%"  visible="{= ${mode>/editMode}}" change="onChangeEntry"/>
+                            </m:VBox>
+                        </template>
+                    </Column>		
+
+					<!-- Add item button -->
+                    <Column width="7rem" visible="{= ${mode>/editMode}}">
+                        <template>
+                            <m:Button text="Add item" press="onAddItem" />
+                        </template>
+                    </Column>                  
+                </columns>
+            </TreeTable>  
+        </m:content>
+    </m:Page>
+</mvc:View>
